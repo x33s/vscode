@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件父子传值</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app" class="step03_page">
+
+        <h2 :style="{ fontSize: postFontSize + 'em' }">子（data） ----> 父 使用 $emit</h2>
+
+        <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:enlarge-text="onEnlargeText">
+        </blog-post>
+
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script>
+        Vue.component('blog-post', {
+            props: ['post'],
+            template: `
+                    <div class="blog-post">
+                        <h3>{{ post.title }}</h3>
+                        <div v-html="post.content"></div>
+                        <button v-on:click="$emit('enlarge-text', 0.1)">子按钮</button>
+                    </div>
+                    `
+        })
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                postFontSize: 1,
+                posts: [{
+                        id: 1,
+                        title: 'My journey with Vue'
+                    },
+                    {
+                        id: 2,
+                        title: 'Blogging with Vue'
+                    },
+                    {
+                        id: 3,
+                        title: 'Why Vue is so fun'
+                    }
+                ]
+            },
+            methods: {
+                onEnlargeText: function (enlargeAmount) {
+                    this.postFontSize += enlargeAmount
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
